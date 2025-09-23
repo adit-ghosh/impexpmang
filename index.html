@@ -12,258 +12,151 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
-            min-height: 100vh;
-            padding: 0;
-            margin: 0;
+            background-color: #f3f4f6;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
         }
         .presentation-container {
-            width: 100vw;
-            max-width: 1280px;
-            min-width: 0;
-            min-height: 0;
-            height: auto;
-            background: rgba(255,255,255,0.95);
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.15);
-            padding: 2rem 1rem;
+            width: 100%;
+            max-width: 900px;
             position: relative;
-            overflow: hidden;
+            background-color: #fff;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 2.5rem;
+            min-height: 520px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            justify-content: space-between;
         }
-        .flex-grow.w-full {
+        .slides-wrapper {
+            position: relative;
             width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-grow: 1;
         }
         .slide {
             display: none;
-            flex-grow: 1;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            padding: 2rem;
-            text-align: center;
+            padding: 2.5rem 2rem;
+            background: #f8fbff;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 24px -8px #3b82f6, 0 0 0 4px #e0e7ff;
             opacity: 0;
-            transition: opacity 0.5s;
-            justify-content: center;
-            align-items: center;
+            transition: opacity 0.5s ease-in-out;
+            overflow-y: auto;
         }
         .slide.active {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
             opacity: 1;
-            animation: fadeIn 0.7s;
-            height: 100%;
         }
         .slide-title {
             font-size: 2.5rem;
             font-weight: 800;
             color: #1f2937;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             text-align: left;
-            position: relative;
-            padding-left: 1.2rem;
-        }
-        .slide-title::before {
-            content: '';
-            display: block;
-            position: absolute;
-            left: 0;
-            top: 0.5rem;
-            width: 8px;
-            height: 2.2rem;
-            border-radius: 8px;
-            background: linear-gradient(180deg, #3b82f6 0%, #6b21a8 100%);
         }
         .slide-content {
-            background: linear-gradient(90deg, #f3f4f6 80%, #e0e7ff 100%);
-            border-left: 8px solid #3b82f6;
-            border-radius: 1rem;
-            padding: 2rem 2rem 2rem 2.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 4px 24px -8px #3b82f6;
-            position: relative;
+            font-size: 1.125rem;
+            line-height: 1.75rem;
+            color: #4b5563;
+            text-align: left;
         }
-        .slide-content ul, .slide-content p {
-            font-weight: bold;
-            font-size: 1.15rem;
-            color: #1f2937;
+        .slide-content ul {
+            list-style-type: disc;
+            margin-left: 2rem;
         }
         .slide-content li {
-            margin-bottom: 0.7rem;
-            padding: 0.3rem 0.7rem;
-            border-radius: 0.5rem;
-            background: #e0e7ff;
+            margin-bottom: 0.5rem;
+        }
+        .navigation-buttons {
             display: flex;
-            align-items: center;
-            gap: 0.7rem;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 2rem;
         }
-        .slide-content li i {
-            font-size: 1.1em;
-            color: #3b82f6;
-            margin-right: 0.3em;
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(to right, #3b82f6, #60a5fa);
+            color: white;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(0);
         }
-        .slide-content li:hover {
-            background: #dbeafe;
-            color: #2563eb;
+        .nav-btn:hover {
+            background: linear-gradient(to right, #2563eb, #3b82f6);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .slide-number {
+        .nav-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .slide-counter {
             position: absolute;
-            top: 1.2rem;
-            right: 2rem;
-            background: #3b82f6;
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 0.4rem 1rem;
-            border-radius: 1rem;
-            box-shadow: 0 2px 8px -2px #3b82f6;
-            z-index: 10;
+            bottom: 1rem;
+            right: 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #6b7280;
         }
-        .slide-title {
+        .main-title-slide {
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 0.7rem;
+            text-align: center;
         }
-        .slide-title i {
-            font-size: 1.5em;
-            color: #3b82f6;
-        }
-        @media (max-width: 900px) {
-            body {
-                align-items: flex-start;
-                justify-content: flex-start;
-            }
-            .presentation-container {
-                width: 100vw;
-                min-width: 0;
-                padding: 1rem 0.2rem;
-                border-radius: 1rem;
-                height: auto;
-                box-shadow: 0 8px 24px -8px rgba(59, 130, 246, 0.10);
-            }
-            .slide-title {
-                font-size: 1.3rem;
-                padding-left: 0.5rem;
-                margin-bottom: 1rem;
-            }
-            .slide-content {
-                padding: 0.7rem 0.7rem 0.7rem 1rem;
-                font-size: 1rem;
-            }
-            .slide-content ul, .slide-content p {
-                font-size: 1rem;
-            }
-            .slide-number {
-                right: 0.5rem;
-                top: 0.5rem;
-                font-size: 0.9rem;
-                padding: 0.2rem 0.5rem;
-            }
-            .navigation-buttons {
-                padding: 0 0.2rem;
-            }
-            .nav-btn {
-                padding: 0.5rem 0.8rem;
-                font-size: 0.9rem;
-            }
-            .slide-counter {
-                right: 0.5rem;
-                bottom: 0.5rem;
-                padding: 0.2rem 0.5rem;
-                font-size: 0.85rem;
-            }
-            .w-full.text-center h1 {
-                font-size: 2rem !important;
-            }
-            .w-full.text-center p {
-                font-size: 1rem !important;
-            }
-            img, svg {
-                max-width: 80vw;
-                height: auto;
-            }
+        .thank-you-slide {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
         @media (max-width: 600px) {
             .presentation-container {
-                padding: 0.5rem 0.1rem;
-                border-radius: 0.5rem;
+                padding: 1rem;
+                border-radius: 1rem;
+                min-height: 400px;
+            }
+            .slide {
+                padding: 1.5rem 1rem;
             }
             .slide-title {
-                font-size: 1rem;
-                padding-left: 0.3rem;
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
             }
             .slide-content {
-                padding: 0.5rem 0.5rem 0.5rem 0.7rem;
-                font-size: 0.95rem;
+                font-size: 0.9rem;
             }
-            .slide-content ul, .slide-content p {
-                font-size: 0.95rem;
+            .slide-content ul {
+                margin-left: 1.5rem;
             }
             .nav-btn {
-                padding: 0.3rem 0.5rem;
-                font-size: 0.8rem;
-            }
-            .slide-number {
-                font-size: 0.8rem;
-                padding: 0.1rem 0.3rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
             .slide-counter {
-                font-size: 0.75rem;
-                padding: 0.1rem 0.3rem;
-            }
-            .w-full.text-center h1 {
-                font-size: 1.2rem !important;
-            }
-            .w-full.text-center p {
-                font-size: 0.8rem !important;
-            }
-            img, svg {
-                max-width: 98vw;
-                height: auto;
-            }
-        }
-        .navigation-buttons {
-            position: absolute;
-            width: 100%;
-            left: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-
-        #prevBtn, #nextBtn {
-            position: absolute;
-            bottom: 2rem;
-            pointer-events: auto;
-        }
-
-        #prevBtn {
-            left: 2rem;
-        }
-
-        #nextBtn {
-            right: 2rem;
-        }
-
-        @media (max-width: 900px) {
-            #prevBtn, #nextBtn {
-                bottom: 1rem;
-            }
-            #prevBtn {
-                left: 1rem;
-            }
-            #nextBtn {
-                right: 1rem;
+                font-size: 0.8rem;
+                bottom: 0.5rem;
+                right: 0.5rem;
             }
         }
     </style>
@@ -272,9 +165,9 @@
 
     <div class="presentation-container">
         <!-- Slides Container -->
-        <div class="flex-grow w-full">
+        <div class="slides-wrapper">
             <!-- Title Slide -->
-            <div class="slide active">
+            <div class="slide active main-title-slide">
                 <div class="w-full text-center">
                     <h1 class="text-5xl font-extrabold text-blue-600 mb-4">INCOTERMS<br>AND THEIR APPLICATIONS</h1>
                     <p class="text-xl font-medium text-gray-600">Import Export Management</p>
@@ -283,41 +176,25 @@
 
             <!-- Slide 1: Introduction -->
             <div class="slide">
-                <h2 class="slide-title"><i class="fas fa-globe"></i> Introduction to Incoterms</h2>
+                <h2 class="slide-title">Introduction to Incoterms</h2>
                 <div class="slide-content">
-                    <span class="slide-number"></span>
-                    <div class="flex items-center gap-6 mb-4">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/ICC_logo.svg" alt="ICC Logo" class="h-16 w-auto">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="10" fill="#3b82f6"/>
-                            <path d="M7 12h10M12 7v10" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
                     <ul>
-                        <li><i class="fas fa-book"></i> <strong>Incoterms</strong> (International Commercial Terms) are a set of globally recognized rules published by the <strong>International Chamber of Commerce</strong> (ICC).</li>
-                        <li><i class="fas fa-user-shield"></i> They define the responsibilities of sellers and buyers for the delivery of goods under sales contracts.</li>
-                        <li><i class="fas fa-file-contract"></i> They specify who is responsible for paying and managing the shipment, insurance, documentation, and customs clearance.</li>
-                        <li><i class="fas fa-calendar-alt"></i> The latest version is <strong>Incoterms 2020</strong>.</li>
+                        <li>Incoterms (International Commercial Terms) are a set of globally recognized rules published by the International Chamber of Commerce (ICC).</li>
+                        <li>They define the responsibilities of sellers and buyers for the delivery of goods under sales contracts.</li>
+                        <li>They specify who is responsible for paying and managing the shipment, insurance, documentation, and customs clearance.</li>
+                        <li>The latest version is Incoterms 2020.</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Slide 2: Why are Incoterms Important? -->
             <div class="slide">
-                <h2 class="slide-title"><i class="fas fa-question-circle"></i> Why are Incoterms Important?</h2>
+                <h2 class="slide-title">Why are Incoterms Important?</h2>
                 <div class="slide-content">
-                    <span class="slide-number"></span>
-                    <div class="flex gap-6 mb-4">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-                            <rect x="4" y="4" width="16" height="16" rx="4" fill="#f59e0b"/>
-                            <path d="M12 8v4l3 3" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" alt="Risk Icon" class="h-12 w-12">
-                    </div>
                     <ul>
-                        <li><i class="fas fa-shield-alt"></i> Clarity and Risk Mitigation: They prevent misunderstandings by clearly defining the point at which risk transfers from the seller to the buyer.</li>
-                        <li><i class="fas fa-coins"></i> Cost Allocation: They allocate costs for shipping, insurance, and other logistics expenses, ensuring both parties know their financial responsibilities.</li>
-                        <li><i class="fas fa-language"></i> Global Standardization: They provide a common language for international trade, making transactions smoother and more efficient worldwide.</li>
+                        <li><i class="fas fa-shield-alt text-blue-500 mr-2"></i> Clarity and Risk Mitigation: They prevent misunderstandings by clearly defining the point at which risk transfers from the seller to the buyer.</li>
+                        <li><i class="fas fa-coins text-blue-500 mr-2"></i> Cost Allocation: They allocate costs for shipping, insurance, and other logistics expenses.</li>
+                        <li><i class="fas fa-language text-blue-500 mr-2"></i> Global Standardization: They provide a common language for international trade, making transactions smoother and more efficient worldwide.</li>
                     </ul>
                 </div>
             </div>
@@ -327,30 +204,22 @@
                 <h2 class="slide-title">Key Concepts in Incoterms</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>Delivery: The point at which the risk of loss or damage to the goods transfers from the seller to the buyer.</li>
-                        <li>Cost: Who is responsible for paying for transport, insurance, and other costs.</li>
-                        <li>Risk: Who bears the risk of loss or damage to the goods during transit.</li>
-                        <li>Obligations: The duties of both parties, such as arranging for transport and providing documents.</li>
+                        <li><i class="fas fa-box text-blue-500 mr-2"></i> Delivery: The point at which the risk of loss or damage to the goods transfers from the seller to the buyer.</li>
+                        <li><i class="fas fa-dollar-sign text-blue-500 mr-2"></i> Cost: Who is responsible for paying for transport, insurance, and other costs.</li>
+                        <li><i class="fas fa-chart-line text-blue-500 mr-2"></i> Risk: Who bears the risk of loss or damage to the goods during transit.</li>
+                        <li><i class="fas fa-clipboard-list text-blue-500 mr-2"></i> Obligations: The duties of both parties, such as arranging for transport and providing documents.</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Slide 4: Categories -->
             <div class="slide">
-                <h2 class="slide-title"><i class="fas fa-list-ul"></i> Categories of Incoterms</h2>
+                <h2 class="slide-title">Categories of Incoterms</h2>
                 <div class="slide-content">
-                    <span class="slide-number"></span>
-                    <div class="flex gap-6 mb-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/1048/1048313.png" alt="Transport Modes" class="h-12 w-12">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-                            <rect x="2" y="8" width="20" height="8" rx="2" fill="#10b981"/>
-                            <rect x="6" y="4" width="12" height="4" rx="1" fill="#3b82f6"/>
-                        </svg>
-                    </div>
+                    <p class="mb-4">Incoterms are divided into two main groups based on the mode of transport:</p>
                     <ul>
-                        <li><i class="fas fa-truck"></i> Incoterms are divided into two main groups based on the mode of transport:</li>
-                        <li><i class="fas fa-shipping-fast"></i> Rules for any mode or modes of transport: EXW, FCA, CPT, CIP, DAP, DPU, DDP.</li>
-                        <li><i class="fas fa-ship"></i> Rules for sea and inland waterway transport: FAS, FOB, CFR, CIF.</li>
+                        <li><i class="fas fa-plane-departure text-blue-500 mr-2"></i> Rules for any mode or modes of transport: EXW, FCA, CPT, CIP, DAP, DPU, DDP.</li>
+                        <li><i class="fas fa-ship text-blue-500 mr-2"></i> Rules for sea and inland waterway transport: FAS, FOB, CFR, CIF.</li>
                     </ul>
                 </div>
             </div>
@@ -359,8 +228,11 @@
             <div class="slide">
                 <h2 class="slide-title">Incoterms Explained: Group E (Departure)</h2>
                 <div class="slide-content">
+                    <p class="mb-2 font-bold"><i class="fas fa-warehouse text-blue-500 mr-2"></i> EXW (Ex Works)</p>
                     <ul>
-                        <li>EXW (Ex Works): The seller makes the goods available at their own premises. The buyer bears all risks and costs from that point, including loading the goods. This term places the minimum obligation on the seller.</li>
+                        <li>The seller makes the goods available at their own premises.</li>
+                        <li>The buyer bears all risks and costs from that point.</li>
+                        <li>This term places the minimum obligation on the seller.</li>
                     </ul>
                 </div>
             </div>
@@ -370,9 +242,9 @@
                 <h2 class="slide-title">Incoterms Explained: Group F (Main Carriage Unpaid)</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>FCA (Free Carrier): The seller delivers the goods to the carrier nominated by the buyer at a named place.</li>
-                        <li>FAS (Free Alongside Ship): The seller delivers the goods alongside the vessel at the named port of shipment.</li>
-                        <li>FOB (Free on Board): The seller delivers the goods on board the vessel nominated by the buyer at the named port of shipment. Risk transfers to the buyer when the goods are on board.</li>
+                        <li><i class="fas fa-truck text-blue-500 mr-2"></i> FCA (Free Carrier): The seller delivers the goods to the carrier nominated by the buyer at a named place.</li>
+                        <li><i class="fas fa-anchor text-blue-500 mr-2"></i> FAS (Free Alongside Ship): The seller delivers the goods alongside the vessel at the named port of shipment.</li>
+                        <li><i class="fas fa-ship text-blue-500 mr-2"></i> FOB (Free on Board): The seller delivers the goods on board the vessel nominated by the buyer. Risk transfers to the buyer when the goods are on board.</li>
                     </ul>
                 </div>
             </div>
@@ -382,8 +254,8 @@
                 <h2 class="slide-title">Incoterms Explained: Group C (Main Carriage Paid)</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>CPT (Carriage Paid To): Seller pays for carriage to named destination. Risk transfers when goods are handed to the first carrier.</li>
-                        <li>CIP (Carriage and Insurance Paid To): Similar to CPT, but seller must also obtain a higher level of insurance.</li>
+                        <li><i class="fas fa-dolly-flatbed text-blue-500 mr-2"></i> CPT (Carriage Paid To): Seller pays for carriage of goods to the named destination. Risk transfers when goods are handed to the first carrier.</li>
+                        <li><i class="fas fa-boxes text-blue-500 mr-2"></i> CIP (Carriage and Insurance Paid To): Similar to CPT, but the seller must also obtain a higher level of insurance.</li>
                     </ul>
                 </div>
             </div>
@@ -393,28 +265,20 @@
                 <h2 class="slide-title">Incoterms Explained: Group C (continued)</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>CFR (Cost and Freight): Seller pays costs and freight to the named port of destination. Risk transfers once goods are on board the vessel.</li>
-                        <li>CIF (Cost, Insurance and Freight): Similar to CFR, but the seller is also responsible for providing minimum insurance coverage.</li>
+                        <li><i class="fas fa-money-bill-wave text-blue-500 mr-2"></i> CFR (Cost and Freight): Seller pays costs and freight to the named port of destination. Risk transfers once goods are on board the vessel.</li>
+                        <li><i class="fas fa-hands-holding-circle text-blue-500 mr-2"></i> CIF (Cost, Insurance and Freight): Similar to CFR, but the seller is also responsible for providing minimum insurance coverage.</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Slide 9: Group D (Arrival) -->
             <div class="slide">
-                <h2 class="slide-title"><i class="fas fa-map-marker-alt"></i> Incoterms Explained: Group D (Arrival)</h2>
+                <h2 class="slide-title">Incoterms Explained: Group D (Arrival)</h2>
                 <div class="slide-content">
-                    <span class="slide-number"></span>
-                    <div class="flex gap-6 mb-4">
-                        <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="Arrival" class="h-12 w-12">
-                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="10" fill="#6b21a8"/>
-                            <path d="M12 8v4l3 3" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </div>
                     <ul>
-                        <li><i class="fas fa-map-pin"></i> DAP (Delivered at Place): Seller delivers goods to a named destination. Buyer handles import clearance.</li>
-                        <li><i class="fas fa-box-open"></i> DPU (Delivered at Place Unloaded): Seller delivers to and unloads goods at the named destination.</li>
-                        <li><i class="fas fa-file-invoice-dollar"></i> DDP (Delivered Duty Paid): The seller is responsible for all costs and risks, including customs duties, taxes, and final delivery. This is the maximum seller obligation.</li>
+                        <li><i class="fas fa-map-pin text-blue-500 mr-2"></i> DAP (Delivered at Place): Seller delivers goods to a named destination. Buyer handles import clearance.</li>
+                        <li><i class="fas fa-box-open text-blue-500 mr-2"></i> DPU (Delivered at Place Unloaded): Seller delivers to and unloads goods at the named destination.</li>
+                        <li><i class="fas fa-file-invoice-dollar text-blue-500 mr-2"></i> DDP (Delivered Duty Paid): The seller is responsible for all costs and risks, including customs duties, taxes, and final delivery. This is the maximum seller obligation.</li>
                     </ul>
                 </div>
             </div>
@@ -425,10 +289,10 @@
                 <div class="slide-content">
                     <ul>
                         <li>The choice depends on:</li>
-                        <li>Buyer/Seller Relationship: Trust and familiarity.</li>
-                        <li>Level of Experience: Experience with international trade.</li>
-                        <li>Type of Goods: Nature of the goods (e.g., hazardous, perishable).</li>
-                        <li>Mode of Transport: Sea, air, road, or rail.</li>
+                        <li><i class="fas fa-user-friends text-blue-500 mr-2"></i> Buyer/Seller Relationship</li>
+                        <li><i class="fas fa-tools text-blue-500 mr-2"></i> Level of Experience</li>
+                        <li><i class="fas fa-box-archive text-blue-500 mr-2"></i> Type of Goods</li>
+                        <li><i class="fas fa-route text-blue-500 mr-2"></i> Mode of Transport</li>
                     </ul>
                 </div>
             </div>
@@ -470,39 +334,33 @@
             <div class="slide">
                 <h2 class="slide-title">Incoterms and Risk Transfer</h2>
                 <div class="slide-content">
-                    <p class="mb-4">Understanding the point of risk transfer is crucial for both parties.</p>
+                    <p class="mb-4">Understanding the point of risk transfer is crucial for both parties. Risk generally transfers from seller to buyer the further along the journey the terms go.</p>
                     <div class="flex items-center justify-center p-4 rounded-lg bg-gray-50 border border-gray-200 shadow-inner">
                         <svg viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
                             <!-- Timeline Line -->
                             <line x1="50" y1="75" x2="750" y2="75" stroke="#10B981" stroke-width="4" stroke-dasharray="8 4" />
-
                             <!-- Seller Start -->
                             <circle cx="50" cy="75" r="10" fill="#10B981" />
                             <text x="50" y="105" text-anchor="middle" font-size="20" fill="#10B981">Seller</text>
                             <text x="50" y="45" text-anchor="middle" font-size="16" fill="#1f2937">Factory</text>
-
                             <!-- Group E (EXW) -->
                             <rect x="50" y="10" width="100" height="25" rx="5" ry="5" fill="#EF4444" />
                             <text x="100" y="27" text-anchor="middle" font-size="12" fill="white" font-weight="bold">Group E (EXW)</text>
-
                             <!-- Group F (FCA, FOB, FAS) -->
                             <rect x="155" y="10" width="100" height="25" rx="5" ry="5" fill="#F59E0B" />
                             <text x="205" y="27" text-anchor="middle" font-size="12" fill="white" font-weight="bold">Group F</text>
                             <circle cx="205" cy="75" r="8" fill="#F59E0B" />
                             <text x="205" y="105" text-anchor="middle" font-size="16" fill="#F59E0B">Port/Carrier</text>
-
                             <!-- Group C (CPT, CIP, CFR, CIF) -->
                             <rect x="350" y="10" width="100" height="25" rx="5" ry="5" fill="#3B82F6" />
                             <text x="400" y="27" text-anchor="middle" font-size="12" fill="white" font-weight="bold">Group C</text>
                             <circle cx="400" cy="75" r="8" fill="#3B82F6" />
                             <text x="400" y="105" text-anchor="middle" font-size="16" fill="#3B82F6">Main Carriage</text>
-
                             <!-- Group D (DAP, DPU, DDP) -->
                             <rect x="595" y="10" width="100" height="25" rx="5" ry="5" fill="#6B21A8" />
                             <text x="645" y="27" text-anchor="middle" font-size="12" fill="white" font-weight="bold">Group D</text>
                             <circle cx="645" cy="75" r="8" fill="#6B21A8" />
                             <text x="645" y="105" text-anchor="middle" font-size="16" fill="#6B21A8">Destination</text>
-
                             <!-- Buyer End -->
                             <circle cx="750" cy="75" r="10" fill="#1F2937" />
                             <text x="750" y="105" text-anchor="middle" font-size="20" fill="#1F2937">Buyer</text>
@@ -513,14 +371,12 @@
 
             <!-- Slide 15: Cost Allocation -->
             <div class="slide">
-                <h2 class="slide-title"><i class="fas fa-balance-scale"></i> Incoterms and Cost Allocation</h2>
+                <h2 class="slide-title">Incoterms and Cost Allocation</h2>
                 <div class="slide-content">
-                    <span class="slide-number"></span>
                     <p class="mb-6">The Incoterm used directly determines who pays for what. Responsibilities range from minimal to maximal for the seller.</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
                         <div class="p-6 bg-blue-50 rounded-lg shadow">
                             <i class="fas fa-shipping-fast text-4xl text-blue-500 mb-4"></i>
-                            <img src="https://cdn-icons-png.flaticon.com/512/2921/2921822.png" alt="Seller Cost" class="h-10 w-10 mx-auto mb-2">
                             <h3 class="text-xl font-semibold text-blue-900 mb-2">Seller's Costs</h3>
                             <ul class="list-none text-sm space-y-1">
                                 <li>Export packing</li>
@@ -531,7 +387,6 @@
                         </div>
                         <div class="p-6 bg-green-50 rounded-lg shadow">
                             <i class="fas fa-truck-ramp-box text-4xl text-green-500 mb-4"></i>
-                            <img src="https://cdn-icons-png.flaticon.com/512/2921/2921820.png" alt="Buyer Cost" class="h-10 w-10 mx-auto mb-2">
                             <h3 class="text-xl font-semibold text-green-900 mb-2">Buyer's Costs</h3>
                             <ul class="list-none text-sm space-y-1">
                                 <li>Main carriage</li>
@@ -548,11 +403,10 @@
                 <h2 class="slide-title">Incoterms and Documentation</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>Incoterms also specify which party is responsible for obtaining and providing necessary documents, such as:</li>
-                        <li>Commercial Invoice: Required for customs.</li>
-                        <li>Bill of Lading: A transport document for sea freight.</li>
-                        <li>Packing List: Details the contents of the shipment.</li>
-                        <li>Certificate of Origin: Proves where the goods were made.</li>
+                        <li><i class="fas fa-file-alt text-blue-500 mr-2"></i> Commercial Invoice: Required for customs.</li>
+                        <li><i class="fas fa-file-contract text-blue-500 mr-2"></i> Bill of Lading: A transport document for sea freight.</li>
+                        <li><i class="fas fa-list-check text-blue-500 mr-2"></i> Packing List: Details the contents of the shipment.</li>
+                        <li><i class="fas fa-globe text-blue-500 mr-2"></i> Certificate of Origin: Proves where the goods were made.</li>
                     </ul>
                 </div>
             </div>
@@ -562,9 +416,9 @@
                 <h2 class="slide-title">Incoterms and Insurance</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>Insurance is a critical aspect of risk management.</li>
-                        <li>CIP and CIF are the only Incoterms that explicitly require the seller to purchase insurance for the buyer.</li>
-                        <li>For other terms, the party that bears the risk of loss or damage should arrange for insurance coverage to protect their interests.</li>
+                        <li><i class="fas fa-handshake-angle text-blue-500 mr-2"></i> Insurance is a critical aspect of risk management.</li>
+                        <li><i class="fas fa-file-shield text-blue-500 mr-2"></i> CIP and CIF are the only Incoterms that explicitly require the seller to purchase insurance for the buyer.</li>
+                        <li>For other terms, the party that bears the risk should arrange for insurance coverage.</li>
                     </ul>
                 </div>
             </div>
@@ -574,9 +428,9 @@
                 <h2 class="slide-title">Incoterms vs. Contract of Sale</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>Incoterms are not the contract of sale.</li>
+                        <li><i class="fas fa-scale-balanced text-blue-500 mr-2"></i> Incoterms are not the contract of sale.</li>
                         <li>They only cover the specific aspects of delivery, risk, and cost.</li>
-                        <li>The contract of sale should include other vital details such as product specifications, price, payment terms, and dispute resolution.</li>
+                        <li>The contract of sale should include other vital details such as product specifications, price, and payment terms.</li>
                     </ul>
                 </div>
             </div>
@@ -586,9 +440,9 @@
                 <h2 class="slide-title">Incoterms 2020: Key Changes</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>DPU replaces DAT: "Delivered at Terminal" was renamed to Delivered at Place Unloaded to reflect that the destination could be any place.</li>
-                        <li>Insurance levels: CIP now requires a higher level of insurance (Clause A) while CIF retains the minimum level (Clause C).</li>
-                        <li>FCA with Own Transport: The new version allows for the use of the buyer's or seller's own vehicles for transport under FCA rules.</li>
+                        <li><i class="fas fa-sync-alt text-blue-500 mr-2"></i> DPU replaces DAT: "Delivered at Terminal" was renamed to Delivered at Place Unloaded.</li>
+                        <li><i class="fas fa-money-check-dollar text-blue-500 mr-2"></i> Insurance levels: CIP now requires a higher level of insurance (Clause A) while CIF retains the minimum level (Clause C).</li>
+                        <li><i class="fas fa-truck-moving text-blue-500 mr-2"></i> FCA with Own Transport: The new version allows for the use of the buyer's or seller's own vehicles.</li>
                     </ul>
                 </div>
             </div>
@@ -598,10 +452,10 @@
                 <h2 class="slide-title">Common Mistakes to Avoid</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>Using the wrong Incoterm: Using a sea-only term (e.g., FOB) for air freight.</li>
-                        <li>Not specifying the place: Simply stating "FOB" is insufficient.</li>
-                        <li>Ignoring a term's implications: Not understanding the full costs of a DDP term.</li>
-                        <li>Failure to communicate: Not clearly communicating the chosen Incoterm to all parties.</li>
+                        <li><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> Using the wrong Incoterm: Using a sea-only term (e.g., FOB) for air freight.</li>
+                        <li><i class="fas fa-map-marker-alt text-red-500 mr-2"></i> Not specifying the place: Simply stating "FOB" is insufficient.</li>
+                        <li><i class="fas fa-eye-slash text-red-500 mr-2"></i> Ignoring a term's implications: Not understanding the full costs of a DDP term.</li>
+                        <li><i class="fas fa-comments text-red-500 mr-2"></i> Failure to communicate: Not clearly communicating the chosen Incoterm to all parties.</li>
                     </ul>
                 </div>
             </div>
@@ -611,32 +465,31 @@
                 <h2 class="slide-title">Incoterms and Global Logistics</h2>
                 <div class="slide-content">
                     <ul>
-                        <li>Incoterms are the foundation for managing logistics in international trade.</li>
+                        <li><i class="fas fa-earth-americas text-blue-500 mr-2"></i> Incoterms are the foundation for managing logistics in international trade.</li>
                         <li>They dictate:</li>
-                        <li>Freight Forwarding: Who selects and pays the forwarder.</li>
-                        <li>Customs Brokerage: Who is responsible for customs clearance.</li>
-                        <li>Carrier Selection: Who contracts the shipping carrier.</li>
+                        <li><i class="fas fa-boxes-packing text-blue-500 mr-2"></i> Freight Forwarding: Who selects and pays the forwarder.</li>
+                        <li><i class="fas fa-passport text-blue-500 mr-2"></i> Customs Brokerage: Who is responsible for customs clearance.</li>
+                        <li><i class="fas fa-container-shipping text-blue-500 mr-2"></i> Carrier Selection: Who contracts the shipping carrier.</li>
                     </ul>
                 </div>
             </div>
 
             <!-- Thank You Slide -->
-            <div class="slide">
+            <div class="slide thank-you-slide">
                 <div class="w-full text-center">
                     <h1 class="text-4xl font-extrabold text-blue-600 mb-4">Thank You</h1>
                     <p class="text-xl font-medium text-gray-600">Any Questions?</p>
                 </div>
             </div>
-
+            
+            <div id="slideCounter" class="slide-counter"></div>
         </div>
-
+        
         <!-- Navigation Buttons -->
         <div class="navigation-buttons">
             <button id="prevBtn" class="nav-btn flex items-center gap-2"><i class="fas fa-chevron-left"></i> Previous</button>
             <button id="nextBtn" class="nav-btn flex items-center gap-2">Next <i class="fas fa-chevron-right"></i></button>
         </div>
-
-        <div id="slideCounter" class="slide-counter"></div>
     </div>
 
     <script>
@@ -647,12 +500,10 @@
         let currentSlide = 0;
 
         function showSlide(index) {
-            slides.forEach((slide, i) => {
+            slides.forEach((slide) => {
                 slide.classList.remove('active');
-                if (i === index) {
-                    slide.classList.add('active');
-                }
             });
+            slides[index].classList.add('active');
             updateButtons();
             updateCounter();
         }
@@ -678,8 +529,8 @@
 
         function updateCounter() {
             const slideCount = slides.length - 2; // Subtract title and thank you slides
-            const contentSlideIndex = currentSlide - 1;
-            if (currentSlide === 0 || currentSlide === slides.length - 1) {
+            const contentSlideIndex = currentSlide;
+            if (contentSlideIndex === 0 || contentSlideIndex === slides.length - 1) {
                 slideCounter.textContent = '';
             } else {
                 slideCounter.textContent = `${contentSlideIndex} / ${slideCount}`;
@@ -691,15 +542,6 @@
         
         // Initial setup
         showSlide(currentSlide);
-
-        // Number the slides (excluding title and thank you)
-        const contentSlides = Array.from(document.querySelectorAll('.slide')).slice(1, -1);
-        contentSlides.forEach((slide, idx) => {
-            const numberSpan = slide.querySelector('.slide-number');
-            if (numberSpan) {
-                numberSpan.textContent = `Slide ${idx + 1}`;
-            }
-        });
     </script>
 
 </body>
